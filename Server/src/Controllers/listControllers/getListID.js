@@ -3,7 +3,7 @@ const {config} = require('../../Database/config'); //database
 const pool = mysql.createPool(config); //database
 
 const joi = require('joi'); //validation
-const schema = joi.number().min(1).max(50).required(); //validation
+const schema = joi.number().min(1).max(99).required(); //validation
 
 exports.getListID = function getListAll(req, res) {
     const validate = schema.validate(req.params.id);

@@ -10,7 +10,10 @@ server.use(cors());
 
 
 const {listRoutes} = require('./Routes/listRoutes');
+const {taskRoutes} = require('./Routes/taskRoutes');
 server.use('/list',listRoutes);
+server.use('/task',taskRoutes);
+
 server.use(function(req, res, next) {
   res.status(404).send('Unable to find the requested resource!');
 });
