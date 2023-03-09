@@ -11,6 +11,9 @@ server.use(cors());
 
 const {listRoutes} = require('./Routes/listRoutes');
 server.use('/list',listRoutes);
+server.use(function(req, res, next) {
+  res.status(404).send('Unable to find the requested resource!');
+});
 
 server.listen(3000, () => {
     console.log('Server is running on http://localhost:3000')
