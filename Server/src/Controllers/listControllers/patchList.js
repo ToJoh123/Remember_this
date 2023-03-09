@@ -4,9 +4,9 @@ const pool = mysql.createPool(config); //database
 
 const joi = require('joi'); //validation
 const schema = joi.object({
-    ID: joi.number().required().min(1).max(50),
+    ID: joi.number().required().min(1).max(999),
     ListName: joi.string().required().min(1).max(150),
-    UserID: joi.number().required().min(1).max(50) //TODO: Is this field required?
+    UserID: joi.number().required().min(1).max(999) //TODO: Is this field required?
 })
 
 exports.patchList = function patchList(req, res) {
