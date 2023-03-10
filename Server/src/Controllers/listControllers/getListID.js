@@ -3,9 +3,14 @@ const {config} = require('../../Database/config'); //database
 const pool = mysql.createPool(config); //database
 
 const joi = require('joi'); //validation
-const schema = joi.number().min(1).max(99).required(); //validation
+const schema = joi.number().min(1).max(999).required(); //validation
 
 exports.getListID = function getListAll(req, res) {
+  const jwt = require('jsonwebtoken');
+const token = req.cookies.authToken;
+const decoded = jwt.decode(token);
+const id = decoded.id;
+console.log(id);
     const validate = schema.validate(req.params.id);
     if(validate.error) return res.status(400).json(validate.error.details[0].message)
     pool.execute("SELECT * FROM Lists WHERE userID = ?",[req.params.id], function(err, rows, fields) {
