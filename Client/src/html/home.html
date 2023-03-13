@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Lists and Tasks</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+      <a class="navbar-brand" href="#">Lists and Tasks</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <button class="btn btn-light mr-2">Sign In</button>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-outline-light">Sign Out</button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container mt-5">
+      <div class="row">
+        <!-- Lists -->
+        <div class="col-md-6">
+          <h3>Lists</h3>
+          <form>
+            <div class="form-group">
+              <label for="list-id">ID</label>
+              <input
+                type="text"
+                class="form-control"
+                id="list-id"
+                placeholder="Enter ID"
+              />
+            </div>
+            <div class="form-group">
+              <label for="list-name">Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="list-name"
+                placeholder="Enter Name"
+              />
+            </div>
+            <div class="form-group">
+              <label for="user-id">User ID</label>
+              <input
+                type="text"
+                class="form-control"
+                id="user-id"
+                placeholder="Enter User ID"
+              />
+            </div>
+            <button type="submit" class="btn btn-success">Add List</button>
+          </form>
+        </div>
+
+        <!-- Tasks -->
+        <div class="col-md-6">
+          <h3>Tasks</h3>
+          <form>
+            <div class="form-group">
+              <label for="task-id">ID</label>
+              <input
+                type="text"
+                class="form-control"
+                id="task-id"
+                placeholder="Enter ID"
+              />
+            </div>
+            <div class="form-group">
+              <label for="task-name">Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="task-name"
+                placeholder="Enter Name"
+              />
+            </div>
+            <div class="form-group">
+              <label for="task-list-id">List ID</label>
+              <input
+                type="text"
+                class="form-control"
+                id="task-list-id"
+                placeholder="Enter List ID"
+              />
+            </div>
+            <button type="submit" class="btn btn-success">Add Task</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

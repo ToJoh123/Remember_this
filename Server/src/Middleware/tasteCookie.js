@@ -14,9 +14,9 @@ exports.tasteCookie = function tasteCookie (req, res, next) {
     if (loggedInUser.exp < Date.now() / 1000) {
         return res.status(401).json({message: 'Unauthorized'});
     }
-    if (err){
-        console.log(err);
-    }
+    // if (err){
+    //     console.log(err);
+    // }
     req.loggedInUser = loggedInUser;
     next();
 }

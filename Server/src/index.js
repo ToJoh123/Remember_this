@@ -6,7 +6,7 @@ require ('dotenv').config();
 
 server.use(cookieParser());
 server.use(express.json());
-server.use(cors());
+server.use(cors({origin: 'http://127.0.0.1:5500', credentials: true}));
 
 
 const {listRoutes} = require('./Routes/listRoutes');

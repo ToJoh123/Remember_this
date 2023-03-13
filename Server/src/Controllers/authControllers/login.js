@@ -6,10 +6,9 @@ const jwt = require('jsonwebtoken'); //🍪
 const secret = process.env.ACCESS_TOKEN_SECRET;
 const pool = mysql.createPool(config);
 const schema = joi.object({
-    Name: joi.string().min(3).max(45), // TODO: Remove? 
-    Username: joi.string().min(3).max(45).required(),
-    Email: joi.string().email().required(),
-    Password: joi.string().min(3).max(15).required(),
+    username: joi.string().min(3).max(45).required(),
+    // Email: joi.string().email().required(),
+    password: joi.string().min(3).max(15).required(),
  })
 
 exports.login = function login (req, res) {
@@ -20,7 +19,7 @@ exports.login = function login (req, res) {
      }
      const getPassword = `
      SELECT password FROM Users WHERE Username=?`;
-     const values = [req.body.Username];
+     const values = [req.body.username];
      pool.execute(getPassword, values, function (err,rows, fields) {
          if (err) {
              console.log(err);
@@ -30,7 +29,7 @@ exports.login = function login (req, res) {
              return res.status(404).json({message: 'User not found'});
          }
 
-         const isPasswordCorrect = bcrypt.compareSync(req.body.Password, rows[0].password);
+         const isPasswordCorrect = bcrypt.compareSync(req.body.password, rows[0].password);
          if (!isPasswordCorrect) {
                return res.status(400).json({message: 'Incorrect password'});
          }
@@ -45,9 +44,9 @@ exports.login = function login (req, res) {
                 return res.status(500).json({message: 'Internal Server Error'});
               }
               const copyOfUser = rows[0];
-              delete copyOfUser.Password;
-              delete copyOfUser.Name;
-              delete copyOfUser.Email;
+              delete copyOfUser.password;
+              delete copyOfUser.name;
+              delete copyOfUser.email;
               const authToken = jwt.sign(copyOfUser, secret, {expiresIn: 120});
               res.cookie('authToken', authToken, {
                 maxAge: 360000,
