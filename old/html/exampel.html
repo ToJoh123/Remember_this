@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Remember this</title>
+  </head>
+  <style>
+    .task-container {
+      width: 50%;
+      margin: 0 auto;
+      border: 1px solid black;
+      padding: 10px;
+    }
+  </style>
+  <body>
+    <h1>my new list</h1>
+    <div class="list-container">
+      <input type="text" id="list-input" placeholder="Create a new list..." />
+      <button id="list-btn">Add</button>
+    </div>
+
+    <div class="task-container">
+      <div>
+        <input
+          class="task-input"
+          type="text"
+          id="task-input"
+          placeholder="Enter a task..."
+        />
+        <button class="task-btn" id="task-btn">Add</button>
+      </div>
+      <h2>My Todo List</h2>
+      <ul id="myUL">
+        <li>Learn HTML</li>
+        <li>Learn CSS</li>
+        <li>Learn JavaScript</li>
+      </ul>
+    </div>
+    <script>
+      const taskBtn = document.getElementById("task-btn");
+      const taskInput = document.getElementById("task-input");
+
+      taskBtn.addEventListener("click", () => {
+        const task = taskInput.value;
+        const li = document.createElement("li");
+        li.innerText = task;
+        document.getElementById("myUL").appendChild(li);
+      });
+
+      const listBtn = document.getElementById("list-btn");
+      const listInput = document.getElementById("list-input");
+
+      listBtn.addEventListener("click", () => {
+        const list = listInput.value;
+        // console.log(list);
+        //create a div with class task-container
+        //create a div with input and button
+        //create a h2 with the list name
+        //create a ul
+        //append the div to the body
+
+        const taskContainer = document.createElement("div");
+        taskContainer.classList.add("task-container");
+        const taskDiv = document.createElement("div");
+        const elTaskInput = document.createElement("input");
+        elTaskInput.classList.add("task-input");
+        elTaskInput.setAttribute("type", "text");
+        elTaskInput.setAttribute("id", "task-input");
+        elTaskInput.setAttribute("placeholder", "Enter a task...");
+
+        const elTaskButton = document.createElement("button");
+        elTaskButton.classList.add("task-btn");
+        elTaskButton.setAttribute("id", "task-btn");
+        elTaskButton.innerText = "Add";
+
+        const elTaskUl = document.createElement("ul");
+        elTaskUl.setAttribute("id", "myUL");
+
+        const elTaskH2 = document.createElement("h2");
+        elTaskH2.innerText = list;
+
+        taskDiv.appendChild(elTaskInput);
+        taskDiv.appendChild(elTaskButton);
+        taskContainer.appendChild(taskDiv);
+        taskContainer.appendChild(elTaskH2);
+        taskContainer.appendChild(elTaskUl);
+        document.body.appendChild(taskContainer);
+      });
+    </script>
+  </body>
+</html>

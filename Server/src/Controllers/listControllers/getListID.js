@@ -4,9 +4,9 @@ const pool = mysql.createPool(config); //database
 
 const joi = require('joi'); //validation
 const schema = joi.number().min(1).max(999).required(); //validation
-
+const jwt = require('jsonwebtoken');
 exports.getListID = function getListAll(req, res) {
-  const jwt = require('jsonwebtoken');
+
 const token = req.cookies.authToken;
 const decoded = jwt.decode(token);
 const id = decoded.id;

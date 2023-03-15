@@ -4,10 +4,10 @@ const bcrypt = require('bcrypt');// 🐝⚰️->#️⃣->🧂->🔑=🔐
 const pool = mysql.createPool(config);
 const joi = require('joi'); //validation
 const schema = joi.object({
-    Name: joi.string().min(3).max(45),
-    Username: joi.string().min(3).max(45).required(),
-    Email: joi.string().email().required(),
-    Password: joi.string().min(3).max(15).required(),
+    name: joi.string().min(0).max(45),
+    username: joi.string().min(3).max(45).required(),
+    email: joi.string().email().required(),
+    password: joi.string().min(3).max(15).required(),
  })
 
 exports.register = function register (req, res) {
@@ -18,8 +18,8 @@ exports.register = function register (req, res) {
      const query = 'INSERT INTO Users (Name, Username, Email, Password) VALUES (?, ?, ?, ?)'
 
      const salt = bcrypt.genSaltSync(10); 
-     const hashedPassword = bcrypt.hashSync(req.body.Password, salt);
-     const values = [req.body.Name, req.body.Username, req.body.Email, hashedPassword];
+     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
+     const values = [req.body.name, req.body.username, req.body.email, hashedPassword];
      pool.execute(query, values, (err, rows,fields) => {
         if (err) {
             console.log(err)

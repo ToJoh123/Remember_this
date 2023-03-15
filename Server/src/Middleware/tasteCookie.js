@@ -7,6 +7,7 @@ exports.tasteCookie = function tasteCookie (req, res, next) {
         return res.status(401).json({message: 'Unauthorized'});
     }
     const loggedInUser = jwt.verify(authKey, secret);
+    
     if(!loggedInUser) {
         return res.status(401).json({message: 'Unauthorized'});
     }

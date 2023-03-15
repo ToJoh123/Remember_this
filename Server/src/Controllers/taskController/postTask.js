@@ -5,7 +5,6 @@ const pool = mysql.createPool(config); //database
 const joi = require('joi'); //validation
 const schema = joi.object({
     Text: joi.string().required().min(1).max(150),
-    Status: joi.string().required().min(1).max(50),
     ListID: joi.number().required().min(1).max(999)
 })
 
@@ -15,8 +14,8 @@ exports.postTask = function postTask(req, res) {
         return res.status(400).send(error.details[0].message);
     } //validation
 
-    const query = "INSERT INTO Tasks (Text, Status, ListID) VALUES (?, ?, ?)";
-    const values = [req.body.Text,req.body.Status,req.body.ListID]
+    const query = "INSERT INTO Tasks (Text, ListID) VALUES (?, ?)";
+    const values = [req.body.Text,req.body.ListID]
     pool.execute(query, values, function(err, rows, fields) {
       if (err) {
         if (err.code === 'ER_DUP_ENTRY') {

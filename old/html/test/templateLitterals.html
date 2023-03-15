@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Remember this</title>
+  </head>
+  <style>
+    .task-container {
+      width: 50%;
+      margin: 0 auto;
+      border: 1px solid black;
+      padding: 10px;
+    }
+  </style>
+  <body>
+    <h1>my new list</h1>
+    <div class="list-container">
+      <input type="text" id="list-input" placeholder="Create a new list..." />
+      <button id="list-btn">Add</button>
+    </div>
+    <div class="tasks">
+      <div class="task-container">
+        <div>
+          <input
+            class="task-input"
+            type="text"
+            id="task-input"
+            placeholder="Enter a task..."
+          />
+          <button class="task-btn" id="task-btn">Add</button>
+          <button value="2">x</button>
+        </div>
+        <h2>My Todo List</h2>
+        <ul id="myUL">
+          <li>Learn HTML <button>x</button></li>
+          <li>Learn CSS</li>
+          <li>Learn JavaScript</li>
+        </ul>
+      </div>
+    </div>
+    <script>
+      const taskBtn = document.getElementById("task-btn");
+      const taskInput = document.getElementById("task-input");
+
+      taskBtn.addEventListener("click", () => {
+        const task = taskInput.value;
+        const li = document.createElement("li");
+        li.innerText = task;
+        document.getElementById("myUL").appendChild(li);
+      });
+
+      const listBtn = document.getElementById("list-btn");
+      const listInput = document.getElementById("list-input");
+      const taskDiv = document.querySelector(".tasks");
+
+      // createTaskEventListener();
+      function createTaskEventListener(list) {
+        const taskBtn = document.getElementById(`task-btn-${list}`);
+        const taskInput = document.getElementById(`task-input-${list}`);
+        const myUL = document.getElementById(`myUL-${list}`);
+        taskBtn.addEventListener("click", () => {
+          const task = taskInput.value;
+          const li = document.createElement("li");
+          li.innerText = task;
+          myUL.appendChild(li);
+        });
+      }
+
+      listBtn.addEventListener("click", () => {
+        const list = listInput.value;
+        const taskContainer = `
+    <div class="task-container">
+      <div>
+        <input class="task-input" type="text" id="task-input-${list}" placeholder="Enter a task...">
+        <button class="task-btn" id="task-btn-${list}">Add</button>
+      </div>
+      <h2>${list}</h2>
+      <ul id="myUL-${list}"></ul>
+    </div>
+  `;
+
+        document.body.insertAdjacentHTML("beforeend", taskContainer);
+        createTaskEventListener(list);
+      });
+    </script>
+  </body>
+</html>

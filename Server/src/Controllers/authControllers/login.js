@@ -7,7 +7,6 @@ const secret = process.env.ACCESS_TOKEN_SECRET;
 const pool = mysql.createPool(config);
 const schema = joi.object({
     username: joi.string().min(3).max(45).required(),
-    // Email: joi.string().email().required(),
     password: joi.string().min(3).max(15).required(),
  })
 
@@ -47,12 +46,12 @@ exports.login = function login (req, res) {
               delete copyOfUser.password;
               delete copyOfUser.name;
               delete copyOfUser.email;
-              const authToken = jwt.sign(copyOfUser, secret, {expiresIn: 120});
+              const authToken = jwt.sign(copyOfUser, secret, {expiresIn: 12000});
               res.cookie('authToken', authToken, {
-                maxAge: 360000,
+                maxAge: 10 * 36000000,
                 sameSite: 'none',
                 // Secure är just nu buggat för Postman, använd inte secure: true för Postman.
-                // secure: true,
+                secure: true,
                 httpOnly: true
             });  
               // Return a success response to the client

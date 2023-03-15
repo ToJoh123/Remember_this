@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Remember this</title>
+  </head>
+  <style>
+    .task-container {
+      width: 50%;
+      margin: 0 auto;
+      border: 1px solid black;
+      padding: 10px;
+    }
+  </style>
+  <body>
+    <h1>my new list</h1>
+    <div class="list-container">
+      <input type="text" id="list-input" placeholder="Create a new list..." />
+      <button id="list-btn">Add</button>
+    </div>
+    <div class="tasks">
+      <div class="task-container">
+        <div>
+          <input
+            class="task-input"
+            type="text"
+            id="task-input"
+            placeholder="Enter a task..."
+          />
+          <button class="task-btn" id="task-btn">Add</button>
+          <button>x</button>
+        </div>
+        <h2>My Todo List</h2>
+        <ul id="myUL">
+          <li>Learn HTML <button>x</button></li>
+          <li>Learn CSS</li>
+          <li>Learn JavaScript</li>
+        </ul>
+      </div>
+    </div>
+    <script>
+      const myLists = [
+        {
+          id: 1,
+          name: "My first list",
+        },
+        {
+          id: 2,
+          name: "My second list",
+        },
+        {
+          id: 3,
+          name: "My third list",
+        },
+      ];
+      const myTasks = [
+        {
+          id: 1,
+          listId: 1,
+          name: "Learn HTML",
+        },
+        {
+          id: 2,
+          listId: 1,
+          name: "Learn CSS",
+        },
+        {
+          id: 3,
+          listId: 1,
+          name: "Learn JavaScript",
+        },
+        {
+          id: 4,
+          listId: 2,
+          name: "Learn HTML",
+        },
+        {
+          id: 5,
+          listId: 2,
+          name: "Learn CSS",
+        },
+        {
+          id: 6,
+          listId: 2,
+          name: "Learn JavaScript",
+        },
+        {
+          id: 7,
+          listId: 3,
+          name: "Learn HTML",
+        },
+        {
+          id: 8,
+          listId: 3,
+          name: "Learn CSS",
+        },
+        {
+          id: 9,
+          listId: 3,
+          name: "Learn JavaScript",
+        },
+      ];
+      //adding list
+      const listBtn = document.getElementById("list-btn");
+      const listInput = document.getElementById("list-input");
+      listBtn.addEventListener("click", () => {
+        const list = {
+          id: myLists.length + 1,
+          name: listInput.value,
+        };
+        myLists.push(list);
+        //add to the DOM
+        createList(list.name, list.id);
+      });
+      //adding list end
+
+      function createList(list, id) {
+        // const list = list;
+        const taskContainer = `
+        <div class="task-container">
+          <div>
+            <input class="task-input" type="text" id="task-input-${list}" placeholder="Enter a task...">
+            <button class="task-btn" id="task-btn-${list}">Add</button>
+            <button class="delete-list-btn" id="delete-list-btn-${list}" value="${id}">x</button>
+          </div>
+          <h2>${list}</h2>
+          <ul id="task-ul-${id}"></ul>
+        </div>
+      `;
+
+        document.body.insertAdjacentHTML("beforeend", taskContainer);
+        createTaskEventListener(list);
+        deleteListEventListener(list, id);
+      }
+      // createTaskEventListener();
+      function createTaskEventListener(list) {
+        //this function will add another task to the myTasks array
+        const taskBtn = document.getElementById(`task-btn-${list}`);
+        const taskInput = document.getElementById(`task-input-${list}`);
+        const myUL = document.getElementById(`myUL-${list}`);
+        taskBtn.addEventListener("click", () => {
+          //here it will add the task to the myTasks array
+          const task = {
+            id: myTasks.length + 1, //TODO: this should be a PUT to the server. might mean that we cant assign it ID?
+            listId: list,
+            name: taskInput.value,
+          };
+          myTasks.push(task);
+
+          renderTasks();
+        });
+      }
+      //Maybe this should call a function createTask? or not
+      function deleteListEventListener(list, id) {
+        //this function will delete a task from the myTasks array
+        const deleteListBtn = document.getElementById(
+          `delete-list-btn-${list}`
+        );
+        const deleteTaskId = document.getElementById(`delete-list-btn-${id}`);
+
+        deleteListBtn.addEventListener("click", () => {
+          //here it will delete the task from the myTasks array and the DOM by using the id, by searching the array for the id and then deleting it
+          //first i search for the index
+          const searchValue = deleteListBtn.value;
+          const index = myLists.findIndex((list) => list.id === searchValue);
+          //then i delete the task from the array
+          myLists.splice(index, 1); //TODO: this should be a DELETE to the server
+
+          //remove the task from the DOM
+          const taskContainer = document.getElementById(`task-container-${id}`);
+          taskContainer.remove();
+        });
+      }
+      function renderLists() {
+        //remove all the lists from the DOM
+        const taskContainer = document.querySelectorAll(".task-container");
+        taskContainer.forEach((task) => {
+          task.remove();
+        });
+        //this function will render the lists to the DOM
+        myLists.forEach((list) => {
+          createList(list.name, list.id);
+        });
+        //TODO: Check if something is already rendered, if so, delete it
+      }
+
+      function createTask(id, listId, name) {
+        const myUl = document.getElementById(`task-ul-${listId}`);
+        const task = `
+        <li id="task-${id}">${name} <button class="delete-task-btn" id="delete-task-btn-${id}" value="${id}">x</button></li>`;
+        myUl.insertAdjacentHTML("beforeend", task);
+        deleteTaskEventListener(id);
+      }
+      function deleteTaskEventListener(id) {
+        //this function will delete a task from the myTasks array
+        const deleteTaskBtn = document.getElementById(`delete-task-btn-${id}`);
+        deleteTaskBtn.addEventListener("click", () => {
+          //here it will delete the task from the myTasks array and the DOM by using the id, by searching the array for the id and then deleting it
+          //first i search for the index
+          const searchValue = deleteTaskBtn.value;
+          const index = myTasks.findIndex((task) => task.id === searchValue);
+          //then i delete the task from the array
+          myTasks.splice(index, 1); //TODO: this should be a DELETE to the server
+          //delete the task from the DOM
+          const task = document.getElementById(`task-${id}`);
+          task.remove();
+          console.log(myTasks);
+        });
+      }
+      function renderTasks() {
+        myTasks.forEach((task) => {
+          createTask(task.id, task.listId, task.name);
+        });
+        console.log("renderTasks");
+      }
+
+      renderLists();
+      renderTasks();
+    </script>
+  </body>
+</html>
