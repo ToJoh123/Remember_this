@@ -20,6 +20,8 @@ export default function CreateTaskComponent({ list }) {
             // if we get a 200 response, we know we have a valid user
             if (response.status === 200) {
                 setTasks(data);
+
+
             }
             else
                 console.log(console.error());
@@ -43,6 +45,8 @@ export default function CreateTaskComponent({ list }) {
                 const data = response.json();
                 if (response.status === 200) {
                     console.log("created task");
+                    //TODO: find a better way to refresh the page 
+                    window.location.reload();
                 }
                 else
                     console.log(console.error());
@@ -65,6 +69,8 @@ export default function CreateTaskComponent({ list }) {
             .then((response) => {
                 if (response.status === 200) {
                     console.log("deleted list");
+                    //TODO: find a better way to refresh the page 
+                    window.location.reload();
                 }
                 else
                     console.log(console.error());

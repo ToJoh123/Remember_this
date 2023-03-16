@@ -1,44 +1,26 @@
-import React, { useEffect,useState } from 'react';
-import LoginComp from './components/LoginComp';
-import RegisterComp from './components/RegisterComp';
-import CreateListItemComponent from './components/CreateListItemComponent';
-import CreateTaskComponent from './components/CreateTaskComponent';
-import { Container } from '@mui/system';
+import React from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import PrivateRoutes from './auth/PrivateRoutes'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import Welcome from './pages/Welcome'
+import HeaderComp from './components/HeaderComp'
 
-function App() {
-  const [lists, setLists] = useState([]); //list of lists
-
-  //for every list i will create a new task component by passing in the list id
-	useEffect(() => {
-		async function fetchLists() {
-			const response = await fetch('http://localhost:3001/list/all',{
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'},
-        credentials: 'include',});
-			const data = await response.json();
-      console.log(data);
-			setLists(data);
-		}
-		fetchLists();
-	}, []);
-  
+export default function App() {
   return (
-    <div className="App">
-      <RegisterComp/>
-      <Container>
-      <LoginComp/>
-      </Container>
-      <CreateListItemComponent/> 
-      <Container>
-      {lists.map((list) => (
-        <Container>
-         <CreateTaskComponent key={list.ID} list={list}/>
-        </Container>
-      ))}
-      </Container>
+    <div>
+            <BrowserRouter>
+            <HeaderComp />
+          <Routes>
+            <Route element={<PrivateRoutes />}>
+                <Route element={<Home/>} path="/home" exact/>
+            </Route>
+            <Route element={<Welcome/>} path="/" exact/>
+            <Route element={<Register/>} path="/register"/>
+            <Route element={<Login/>} path="/login"/>
+          </Routes>
+      </BrowserRouter>
     </div>
-  );
+  )
 }
-
-export default App;

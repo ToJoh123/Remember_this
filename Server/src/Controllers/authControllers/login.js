@@ -11,10 +11,9 @@ const schema = joi.object({
  })
 
 exports.login = function login (req, res) {
-    
      const validate = schema.validate(req.body)
      if (validate.error) {
-        return res.status(400).json(validate.error.details[0].message);
+        return res.status(400).json({message: validate.error.details[0].message});
      }
      const getPassword = `
      SELECT password FROM Users WHERE Username=?`;

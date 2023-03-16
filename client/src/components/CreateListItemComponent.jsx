@@ -19,7 +19,11 @@ export default function CreateListItemComponent() {
         })
             .then((res) => res.json())
             .then((data) => {
+
+
                 console.log(data);
+                // TODO: find a better way to refresh the page
+                window.location.reload();
             })
             .catch((err) => {
                 console.log("error from fetch", err.message);

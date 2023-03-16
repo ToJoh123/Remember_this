@@ -6,16 +6,16 @@ require ('dotenv').config();
 
 server.use(cookieParser());
 server.use(express.json());
-server.use(cors({ origin: ['http://localhost:5500', 'http://localhost:3000'], credentials: true}));
+server.use(cors({ origin: ['http://localhost:5500', 'http://localhost:3000','http://localhost:3002'], credentials: true}));
 
 
 const {listRoutes} = require('./Routes/listRoutes');
 const {taskRoutes} = require('./Routes/taskRoutes');
 const { authRoutes} = require('./Routes/authRoutes');
-// const { tasteCookie } = require('./Middleware/tasteCookie');
+const { tasteCookie } = require('./Middleware/tasteCookie');
 
-server.use('/list',listRoutes);
-server.use('/task',taskRoutes);
+server.use('/list',tasteCookie,listRoutes);
+server.use('/task',tasteCookie,taskRoutes);
 server.use('/auth',authRoutes);
 
 
