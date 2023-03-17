@@ -10,15 +10,15 @@ import HeaderComp from './components/HeaderComp'
 export default function App() {
   return (
     <div>
-            <BrowserRouter>
-            <HeaderComp />
+        <BrowserRouter>
+          <HeaderComp />
           <Routes>
             <Route element={<PrivateRoutes />}>
                 <Route element={<Home/>} path="/home" exact/>
             </Route>
-            <Route element={<Welcome/>} path="/" exact/>
-            <Route element={<Register/>} path="/register"/>
-            <Route element={<Login/>} path="/login"/>
+              <Route element={<Welcome/>} path="/" exact/>
+              <Route element={<Register/>} path="/register"/>
+              <Route element={<Login/>} path="/login"/>
           </Routes>
       </BrowserRouter>
     </div>

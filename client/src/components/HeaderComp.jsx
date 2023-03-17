@@ -4,12 +4,21 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 export default function HeaderComp() {
-    function handleLogout() {
-        // delete cookie
-        document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
-        // redirect to login page
-        window.location.href = "/login";
+    const handleLogout = async () => {
+        console.log('logout');
+        const response = await fetch('http://localhost:3001/auth/logout', {
+            method: 'Get',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const data = await response.json();
+        console.log(data);
+        if (response.status === 200) {
+            window.location.href = '/';
+        }
+        console.log(data.message);
     }
     return (
         <div>
@@ -26,10 +35,13 @@ export default function HeaderComp() {
                     <NavLink to="/register">
                         <Button>Register</Button>
                     </NavLink>
-                    <Button onClick={handleLogout}>Login</Button>
+                    <NavLink to="/login">
+                        <Button>Login</Button>
+                    </NavLink>
+
                 </Grid>
                 <Grid item xs>
-                    <Button>Logout</Button>
+                    <Button onClick={handleLogout}>Logout</Button>
                 </Grid>
             </Grid>
         </div>
