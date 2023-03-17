@@ -1,7 +1,7 @@
 module.exports.data=[
   {
     "ID": 1,
-    "Name": "Example User",
+    "Name": "First User",
     "Email": "example@example.com",
     "List": [
       {
@@ -104,7 +104,7 @@ module.exports.data=[
   },
   {
     "ID": 2,
-    "Name": "Another User",
+    "Name": "Second User",
     "Email": "another@example.com",
     "List": [
       {
