@@ -2,22 +2,22 @@ import { IconButton, ListItem, ListItemButton, ListItemText } from '@mui/materia
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useState } from 'react'
 
-export default function ViewTask({ task, onDelete }) {
+export default function ViewTask({ task, onDeleteTask }) {
 
 
     function handleTaskClick() {
-        console.log('task clicked')
+        console.log('You have clicked on task with ID: ', task.ID, ' and text: ', task.Text)
     }
     function handleTaskDelete() {
-        onDelete(task.ID);
+        onDeleteTask(task.ID);
     }
     return (
         <ListItem key={task.ID}>
             <ListItemButton onClick={handleTaskClick}>
                 <ListItemText primary={task.Text} />
             </ListItemButton>
-            <IconButton>
-                <DeleteIcon onClick={handleTaskDelete} />
+            <IconButton onClick={handleTaskDelete}>
+                <DeleteIcon />
             </IconButton>
         </ListItem>
     )

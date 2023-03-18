@@ -3,64 +3,65 @@ import { Container } from '@mui/system'
 import React, { useState, useEffect } from 'react'
 import ViewTask from './ViewTask'
 import DeleteIcon from '@mui/icons-material/Delete';
-import deleteTask from '../../functions/WelcomePage/DeleteTask';
+import { addTaskMockServer, getTasksMockServer } from '../../data/mockServer';
+// const { data } = require('../../data/listExampleData.js')
+const userID = 1
+export default function ViewList({ listData, onDeleteList }) {
+    const [taskData, setTaskdata] = useState([])
+    const [taskInput, setTaskInput] = useState('')
 
-
-export default function ViewList({ list, onDelete }) {
-    const [tasks, setTasks] = useState([]);
     useEffect(() => {
         function fetchData() {
-            setTasks(list.Task)
+            setTaskdata(getTasksMockServer(userID, listData.ID))
         }
         return () => {
             fetchData();
         }
-    }, [list.Task])
-
-
+    }, [])
+    function getTasks() {
+        setTaskdata(getTasksMockServer(userID, listData.ID))
+    }
     function handleCreateTask() {
-        console.log('create task', list.Task)
-        const newID = list.Task.length + 1
-        const newTaskName = 'new task'
-        const newTask = {
-            ID: newID,
-            Text: newTaskName,
-            Completed: false
-        }
-        setTasks(tasks => [
-            ...tasks,
-            newTask
-        ])
+        setTaskdata(taskData => ({
+            ...taskData,
+            Task: [
+                ...taskData.Task,
+                {
+                    ID: taskData.Task.length + 1,
+                    TaskName: taskInput
+                }
+            ]
+        }))
+        getTasks()
+        addTaskMockServer(userID, listData.ID, taskInput)
+        console.log("create task with text", taskInput, taskData)
+    }
 
-    }
     function handleDeleteList() {
-        onDelete(list.ID);
+        onDeleteList(listData.ID);
     }
-    function handleDeleteTask(TaskID) {
-        //copy the tasks array and filter out the task with the same ID as the TaskID
-        console.log(tasks)
-        setTasks(tasks => tasks.filter(task => task.ID !== TaskID))
-        deleteTask(list.ID, TaskID)
+    function handleDeleteTask(taskID) {
+        console.log("delete task with id", taskID)
     }
     return (
-        <Container key={list.ID}>
+        <Container key={listData.ID} >
             <Card>
                 <CardActions>
                     <Button variant="contained" onClick={handleDeleteList}><DeleteIcon /></Button>
 
-                    <TextField />
+                    <TextField onChange={(e) => {
+                        setTaskInput(e.target.value)
+                    }} />
                     <Button variant="contained" onClick={handleCreateTask}>Create</Button>
 
                 </CardActions>
-                <Typography>{list.ListName}</Typography>
+                <Typography>{listData.ListName}</Typography>
                 <CardContent>
                     <List>
-                        {list.Task.map(task => {
-                            return (
-                                <ViewTask key={task.ID} task={task} onDelete={handleDeleteTask} />
-                            )
-                        }
-                        )}
+                        {taskData.Task?.map(task => (
+                            <ViewTask key={task.ID} task={task} onDeleteTask={handleDeleteTask} />
+                        ))}
+
                     </List>
                 </CardContent>
 
