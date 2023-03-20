@@ -3,13 +3,10 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { Container, Typography } from "@mui/material";
 
-
 function LoginComp() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [statusText, setStatusText] = useState('');
-
-
     const handleLogin = async () => {
         const response = await fetch('http://localhost:3001/auth/login', {
             method: 'POST',
@@ -24,7 +21,7 @@ function LoginComp() {
         console.log(data);
         if (response.status === 200) {
             //redirect to home page
-            window.location.href = '/';
+            window.location.href = '/home';
             setStatusText('Logged in');
 
         } else {
@@ -43,7 +40,6 @@ function LoginComp() {
             </Container>
         </div>
     );
-
 
 }
 export default LoginComp;

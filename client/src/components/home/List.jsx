@@ -47,7 +47,9 @@ export default function List({ listItem, onDeleteList, onEditList, onAddTask, se
             }
             {isItemType && <ListForm submitLabel="add task"
                 handleSubmit={(text) => onAddTask(listItem.listId, text)}
-                handleCancel={() => { setActiveList(null) }} />
+                handleCancel={() => { setActiveList(null) }}
+                hasCancelButton
+            />
             }
             {isEditingTask && <ListForm submitLabel="edit task"
                 handleSubmit={(text) => onEditTask(listItem.listId, activeList.taskId, text)} //get text from form, and sending listID and taskID to parent

@@ -10,7 +10,6 @@ function RegisterComp() {
     const [password, setPassword] = useState('');
     const [statusText, setStatusText] = useState('');
 
-
     const handleRegister = async () => {
         const response = await fetch('http://localhost:3001/auth/register', {
             method: 'POST',
@@ -29,10 +28,6 @@ function RegisterComp() {
             setStatusText(data.message);
         }
     }
-
-
-
-
     return (
         <Container>
             <Typography variant="h4">Register</Typography>
@@ -54,7 +49,5 @@ function RegisterComp() {
 
         </Container>
     );
-
-
 }
 export default RegisterComp;

@@ -8,8 +8,8 @@ export default function Lists() {
   const [friendsLists, setFriendsLists] = useState([])
   const [activeList, setActiveList] = useState(null)
 
-  //simple counter to genarate unique ids using datenow
-  let counter = Date.now();
+  //simple counter for ids
+  let counter = 999;
   function increment() {
     return ++counter;
   }
@@ -104,6 +104,7 @@ export default function Lists() {
           const newList = [...userLists];
           newList[listIndex].listName = text;
           setUserLists(newList);
+          setActiveList(null)
         }
         return response.json();
       })
@@ -117,26 +118,88 @@ export default function Lists() {
     console.log("edit list", listID, "to", text);
   }
   function handleAddTask(listID, text) {
-
+    fetch('http://localhost:3001/task', {
+      body: JSON.stringify({ ListID: listID, Text: text }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          const searchParam = listID;
+          const listIndex = userLists.findIndex((list) => list.listId === searchParam);
+          const newList = [...userLists];
+          newList[listIndex].tasks.push({ TaskName: text, TaskID: increment() }); //add random id
+          setUserLists(newList);
+          setActiveList(null)
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
 
     console.log("add task", text, "to list", listID);
   }
-  function handleEditTask(listID, taskID, text) {
+  function handleEditTask(listID, taskID, textInput) {
+    fetch('http://localhost:3001/task', {
+      body: JSON.stringify({ ID: taskID, Text: textInput, ListID: listID }),
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setUserLists(
+            userLists.map((list) => {
+              if (list.listId === listID) {
+                return {
+                  ...list,
+                  tasks: list.tasks.map((task) => {
+                    if (task.taskId === taskID) {
+                      return {
+                        ...task,
+                        taskName: textInput,
+                      };
+                    }
+                    return task;
+                  }),
+                };
+              }
+              return list;
+            })
+          );
+          setActiveList(null)
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
 
-
-    console.log("edit task", taskID, "in list", listID, "to", text);
+    console.log("edit task", taskID, "in list", listID, "to", textInput);
   }
 
   function handleDeleteTask(listID, taskID) {
 
     console.log("delete task", taskID, "from list", listID);
   }
-  console.log("firends", userLists)
+
   return (
     <div className='lists'>
       <div>
         <ListForm submitLabel="add list" handleSubmit={addList} />
-        <h2>My Lists</h2>
+        <h1>Your lists</h1>
         {userLists.map((listItem) => (
           <List
             key={listItem.listId}

@@ -88,7 +88,7 @@ export default function Lists() {
     <div className='lists'>
       <div>
         <ListForm submitLabel="add list" handleSubmit={addList} />
-        <h2>My Lists</h2>
+        <h1>Example lists</h1>
         {userLists.map((listItem) => (
           <List
             key={listItem.ID}
