@@ -1,0 +1,164 @@
+import React, { useState, useEffect } from 'react'
+
+import Friends from './friends/Friends';
+import List from './List';
+import ListForm from './ListForm';
+export default function Lists() {
+  const [userLists, setUserLists] = useState([])
+  const [friendsLists, setFriendsLists] = useState([])
+  const [activeList, setActiveList] = useState(null)
+
+  //simple counter to genarate unique ids using datenow
+  let counter = Date.now();
+  function increment() {
+    return ++counter;
+  }
+  const findIndexOfTasks = (listID) => {
+    const searchParam = listID;
+    const listIndex = userLists.findIndex((list) => list.listId === searchParam);
+    return userLists[listIndex].Task;
+  }
+
+  const addList = (text) => {
+
+    fetch('http://localhost:3001/list', {
+      method: 'POST',
+      body: JSON.stringify({ listName: text }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+      credentials: 'include',
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          const randomID = increment();
+          setUserLists([...userLists, { listId: randomID, listName: text, Task: [] }]);
+        }
+
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log("error from fetch", err.message);
+      });
+    console.log("New list with name", text);
+  }
+
+  useEffect(() => {
+    async function fetchLists() {
+      const response = await fetch('http://localhost:3001/data', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+      });
+      const data = await response.json();
+      setUserLists(data.Lists);
+      setFriendsLists(data.Friends);
+    }
+    fetchLists();
+  }, []);
+
+
+  function handleDeleteList(listID) {
+    fetch('http://localhost:3001/list', {
+      body: JSON.stringify({ ID: listID }),
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setUserLists(userLists.filter((list) => list.listId !== listID));
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+
+    console.log("delete list", listID);
+  }
+
+  function handleEditList(listID, text) {
+    fetch('http://localhost:3001/list', {
+      body: JSON.stringify({ ID: listID, ListName: text }),
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          const searchParam = listID;
+          const listIndex = userLists.findIndex((list) => list.listId === searchParam);
+          const newList = [...userLists];
+          newList[listIndex].listName = text;
+          setUserLists(newList);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+
+    console.log("edit list", listID, "to", text);
+  }
+  function handleAddTask(listID, text) {
+
+
+    console.log("add task", text, "to list", listID);
+  }
+  function handleEditTask(listID, taskID, text) {
+
+
+    console.log("edit task", taskID, "in list", listID, "to", text);
+  }
+
+  function handleDeleteTask(listID, taskID) {
+
+    console.log("delete task", taskID, "from list", listID);
+  }
+  console.log("firends", userLists)
+  return (
+    <div className='lists'>
+      <div>
+        <ListForm submitLabel="add list" handleSubmit={addList} />
+        <h2>My Lists</h2>
+        {userLists.map((listItem) => (
+          <List
+            key={listItem.listId}
+            listItem={listItem}
+            taskItem={findIndexOfTasks(listItem.listId)}
+            onDeleteList={handleDeleteList}
+            onEditList={handleEditList}
+            onAddTask={handleAddTask}
+            setActiveList={setActiveList}
+            activeList={activeList}
+            childOnDeleteTask={handleDeleteTask}
+            onEditTask={handleEditTask}
+          />
+        ))}
+        {friendsLists?.map((friend) => (
+          <Friends
+            key={friend.friendId}
+            friend={friend}
+          />
+        ))
+        }
+      </div>
+    </div>
+  )
+}

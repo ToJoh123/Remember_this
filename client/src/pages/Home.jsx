@@ -1,10 +1,11 @@
 import React from 'react'
-import TodoCompnent from '../components/TodoComponent'
+import TodoComponent from '../components/TodoComponent'
+import Lists from '../components/home/Lists'
 
 export default function Home() {
     return (
         <React.Fragment>
-            <TodoCompnent />
+            <Lists />
         </React.Fragment>
     )
 }
