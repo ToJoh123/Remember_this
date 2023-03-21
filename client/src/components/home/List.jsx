@@ -3,6 +3,7 @@ import ListForm from './ListForm';
 import Task from './Task'
 
 export default function List({ listItem, onDeleteList, onEditList, onAddTask, setActiveList, activeList, childOnDeleteTask, onEditTask }) {
+
     const isEditing =
         activeList &&
         activeList.id === listItem.listId &&
@@ -58,9 +59,31 @@ export default function List({ listItem, onDeleteList, onEditList, onAddTask, se
                 hasCancelButton
             />
             }
-            {listItem && listItem.tasks.map((task) => (
-                <Task key={task.taskId} task={task} onEditTask={handleEditTask} onDeleteTask={handleDeleteTask} />
-            ))}
+            {/* {listItem.tas? (
+                <p>No tasks found</p>
+            ) : (
+                listItem && listItem.tasks.map((task) => (
+                    <Task
+                        key={task.taskId}
+                        task={task}
+                        onEditTask={handleEditTask}
+                        onDeleteTask={handleDeleteTask}
+                    />
+                ))
+            )} */}
+            {listItem.tasks && listItem.tasks.length > 0 ? (
+                listItem && listItem.tasks.map((task) => (
+                    <Task
+                        key={task.taskId}
+                        task={task}
+                        onEditTask={handleEditTask}
+                        onDeleteTask={handleDeleteTask}
+                    />
+                ))
+            ) : (
+                <p>No lists found</p>
+            )}
+
         </ul>
     )
 }

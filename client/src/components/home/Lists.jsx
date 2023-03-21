@@ -14,6 +14,23 @@ export default function Lists() {
   }
 
 
+
+  useEffect(() => {
+    async function fetchLists() {
+      const response = await fetch('http://localhost:3001/data', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+      });
+      const data = await response.json();
+      console.log(data);
+      setUserLists(data.Lists);
+    }
+    fetchLists();
+  }, []);
+
   const addList = (text) => {
 
     fetch('http://localhost:3001/list', {
@@ -41,23 +58,6 @@ export default function Lists() {
     console.log("New list with name", text);
   }
 
-  useEffect(() => {
-    async function fetchLists() {
-      const response = await fetch('http://localhost:3001/data', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-      });
-      const data = await response.json();
-      console.log(data);
-      setUserLists(data.Lists);
-    }
-    fetchLists();
-  }, []);
-
-
   function handleDeleteList(listID) {
     fetch('http://localhost:3001/list', {
       body: JSON.stringify({ ID: listID }),
@@ -69,7 +69,9 @@ export default function Lists() {
     })
       .then((response) => {
         if (response.status === 200) {
-          setUserLists(userLists.filter((list) => list.listId !== listID));
+          //TODO: Remove this hacky way of updating the state
+          window.location.reload();
+          // setUserLists(userLists.filter((list) => list.listId !== listID));
         }
         return response.json();
       })
@@ -190,7 +192,37 @@ export default function Lists() {
   }
 
   function handleDeleteTask(listID, taskID) {
-
+    fetch('http://localhost:3001/task', {
+      body: JSON.stringify({ ID: taskID, ListID: listID }),
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setUserLists(
+            userLists.map((list) => {
+              if (list.listId === listID) {
+                return {
+                  ...list,
+                  tasks: list.tasks.filter((task) => task.taskId !== taskID),
+                };
+              }
+              return list;
+            })
+          );
+          setActiveList(null)
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
     console.log("delete task", taskID, "from list", listID);
   }
 
