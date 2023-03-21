@@ -1,11 +1,14 @@
 const mysql = require("mysql2"); //database
 const { config } = require("../../Database/config");
 const pool = mysql.createPool(config);
+const jwt = require("jsonwebtoken"); //token
 
 exports.getUsers = function getFriends(req, res) {
-  const query = "SELECT * FROM Users";
+  const decoded = jwt.decode(req.cookies.authToken);
+  const query = "SELECT * FROM Users WHERE ID !=(?)";
+  const values = [decoded.ID]; //to get all users except the current user
 
-  pool.execute(query, function (err, rows, fields) {
+  pool.execute(query, values, function (err, rows, fields) {
     if (err) {
       console.log(err);
       return res.status(500).json("error while performing query");

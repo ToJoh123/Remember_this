@@ -37,6 +37,9 @@ export default function HeaderComp() {
                     <NavLink to="/login">
                         <Button>Login</Button>
                     </NavLink>
+                    <NavLink to="/friends">
+                        <Button>Friends</Button>
+                    </NavLink>
 
                 </Grid>
                 <Grid item xs>
