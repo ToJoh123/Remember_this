@@ -5,7 +5,7 @@ const pool = mysql.createPool(config);
 
 //here we want to get the id from the cookie
 
-exports.getData = function getListAll(req, res) {
+exports.getData = function getData(req, res) {
   const data = { Lists: [], Friends: [] };
   //this code will get the id from the cookie
   const decoded = jwt.decode(req.cookies.authToken);
@@ -19,9 +19,13 @@ exports.getData = function getListAll(req, res) {
       return res.status(500).json("error while performing query");
     }
     if (rows.length === 0) {
-      return res.status(404).json("No task found");
+      return res.status(404).json("No data found with this id" + decoded.ID);
     }
     if (rows.length > 0) {
+      //here we want to create an array of objects with the data from the database
+      //we want to have an array of objects with the following structure
+      //data = {Lists:[{listName: "listName", listId: "listId", tasks:[{taskId: "taskId", text: "text", status: "status"}]}]}
+
       rows.forEach((row) => {
         if (data.Lists.length === 0) {
           data.Lists.push({

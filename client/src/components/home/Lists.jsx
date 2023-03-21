@@ -5,19 +5,14 @@ import List from './List';
 import ListForm from './ListForm';
 export default function Lists() {
   const [userLists, setUserLists] = useState([])
-  const [friendsLists, setFriendsLists] = useState([])
   const [activeList, setActiveList] = useState(null)
 
   //simple counter for ids
-  let counter = 999;
+  let counter = Math.random(1 - 199999999);
   function increment() {
     return ++counter;
   }
-  const findIndexOfTasks = (listID) => {
-    const searchParam = listID;
-    const listIndex = userLists.findIndex((list) => list.listId === searchParam);
-    return userLists[listIndex].Task;
-  }
+
 
   const addList = (text) => {
 
@@ -56,8 +51,8 @@ export default function Lists() {
         credentials: 'include',
       });
       const data = await response.json();
+      console.log(data);
       setUserLists(data.Lists);
-      setFriendsLists(data.Friends);
     }
     fetchLists();
   }, []);
@@ -114,8 +109,6 @@ export default function Lists() {
       .catch((error) => {
         console.error('Error:', error);
       });
-
-    console.log("edit list", listID, "to", text);
   }
   function handleAddTask(listID, text) {
     fetch('http://localhost:3001/task', {
@@ -128,11 +121,17 @@ export default function Lists() {
     })
       .then((response) => {
         if (response.status === 200) {
-          const searchParam = listID;
-          const listIndex = userLists.findIndex((list) => list.listId === searchParam);
-          const newList = [...userLists];
-          newList[listIndex].tasks.push({ TaskName: text, TaskID: increment() }); //add random id
-          setUserLists(newList);
+          setUserLists(
+            userLists.map((list) => {
+              if (list.listId === listID) {
+                return {
+                  ...list,
+                  tasks: [...list.tasks, { taskId: increment(), taskName: text }],
+                };
+              }
+              return list;
+            })
+          );
           setActiveList(null)
         }
         return response.json();
@@ -200,27 +199,25 @@ export default function Lists() {
       <div>
         <ListForm submitLabel="add list" handleSubmit={addList} />
         <h1>Your lists</h1>
-        {userLists.map((listItem) => (
-          <List
-            key={listItem.listId}
-            listItem={listItem}
-            taskItem={findIndexOfTasks(listItem.listId)}
-            onDeleteList={handleDeleteList}
-            onEditList={handleEditList}
-            onAddTask={handleAddTask}
-            setActiveList={setActiveList}
-            activeList={activeList}
-            childOnDeleteTask={handleDeleteTask}
-            onEditTask={handleEditTask}
-          />
-        ))}
-        {friendsLists?.map((friend) => (
-          <Friends
-            key={friend.friendId}
-            friend={friend}
-          />
-        ))
-        }
+        {userLists && userLists.length > 0 ? (
+          userLists.map((listItem) => (
+            <List
+              key={listItem.listId}
+              listItem={listItem}
+              onDeleteList={handleDeleteList}
+              onEditList={handleEditList}
+              onAddTask={handleAddTask}
+              setActiveList={setActiveList}
+              activeList={activeList}
+              childOnDeleteTask={handleDeleteTask}
+              onEditTask={handleEditTask}
+            />
+          ))
+        ) : (
+          <p>No lists found</p>
+        )}
+
+        <Friends />
       </div>
     </div>
   )

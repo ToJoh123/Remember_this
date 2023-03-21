@@ -23,7 +23,8 @@ function RegisterComp() {
         const data = await response.json();
         console.log(data);
         if (response.status === 200) {
-            setStatusText('Logged in');
+            window.location.href = '/login';
+            setStatusText('Account created!');
         } else {
             setStatusText(data.message);
         }

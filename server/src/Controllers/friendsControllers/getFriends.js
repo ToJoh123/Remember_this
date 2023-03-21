@@ -5,9 +5,9 @@ const pool = mysql.createPool(config);
 
 exports.getFriends = function getFriends(req, res) {
   decoded = jwt.decode(req.cookies.authToken);
-  const query = "SELECT * FROM Friendships WHERE userA = ?";
+  const query = "SELECT * FROM Friendships WHERE Follower = ?";
   const values = [decoded.ID];
-  pool.execute(query, values, function (err, rows, fields) {
+  pool.execute(query, values, function (err, rows) {
     if (err) {
       console.log(err);
       return res.status(500).json("error while performing query");

@@ -58,7 +58,7 @@ export default function List({ listItem, onDeleteList, onEditList, onAddTask, se
                 hasCancelButton
             />
             }
-            {listItem.tasks?.map((task) => (
+            {listItem && listItem.tasks.map((task) => (
                 <Task key={task.taskId} task={task} onEditTask={handleEditTask} onDeleteTask={handleDeleteTask} />
             ))}
         </ul>

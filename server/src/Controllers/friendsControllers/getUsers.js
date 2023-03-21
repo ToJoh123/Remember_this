@@ -3,10 +3,18 @@ const { config } = require("../../Database/config");
 const pool = mysql.createPool(config);
 const jwt = require("jsonwebtoken"); //token
 
-exports.getUsers = function getFriends(req, res) {
+/*
+SELECT u.ID as userId, Username as username 
+FROM Users u
+LEFT JOIN Friendships f ON f.Follower = 12 AND f.Following = u.ID
+WHERE  f.Follower IS NULL and u.ID != 12;
+*/
+//this function returns users that are not friends with the current user
+exports.getUsers = function getUsers(req, res) {
   const decoded = jwt.decode(req.cookies.authToken);
-  const query = "SELECT * FROM Users WHERE ID !=(?)";
-  const values = [decoded.ID]; //to get all users except the current user
+  const query =
+    "SELECT u.ID as userId, Username as username FROM Users u LEFT JOIN Friendships f ON f.Follower = ? AND f.Following = u.ID WHERE  f.Follower IS NULL and u.ID != ?";
+  const values = [decoded.ID, decoded.ID]; //to get all users except the current user
 
   pool.execute(query, values, function (err, rows, fields) {
     if (err) {
@@ -17,12 +25,7 @@ exports.getUsers = function getFriends(req, res) {
       return res.status(404).json("No users found");
     }
     if (rows.length > 0) {
-      //remove password and email
-      const cleanedRows = rows.map((row) => {
-        const { Password, Email, ...rest } = row;
-        return rest;
-      });
-      return res.status(200).json(cleanedRows);
+      return res.status(200).json(rows);
     }
     res.status(500).json("something unexpected happened");
   });

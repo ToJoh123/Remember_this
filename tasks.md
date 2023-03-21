@@ -24,7 +24,7 @@ VG Requirements:
 - [x] Use at least one custom middleware.
 - [x] Sensitive information (e.g., database login credentials) should be hidden in .env files.
 - [x] Store hashed passwords.
-- [ ] User can add friends (the friend must be registered on the site).
+- [x] User can add friends (the friend must be registered on the site).
 - [ ] User can see friends' to-do lists.
 - [x] Use JWT or another token for authentication.
 
