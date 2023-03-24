@@ -10,7 +10,7 @@ exports.getListID = function getListAll(req, res) {
   const decoded = jwt.decode(token);
   const id = decoded.id;
   console.log(id);
-  const validate = schema.validate(req.params.id);
+  const validate = schema.validate(req.params);
   if (validate.error)
     return res.status(400).json(validate.error.details[0].message);
   pool.execute(
