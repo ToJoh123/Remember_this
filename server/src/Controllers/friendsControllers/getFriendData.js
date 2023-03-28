@@ -6,7 +6,15 @@ SELECT Tasks.ID AS taskId, Tasks.text, Tasks.status, Lists.ListName as listName,
 FROM Tasks RIGHT JOIN Lists ON Tasks.listID = Lists.ID JOIN Users ON Lists.UserID = Users.ID 
 WHERE Users.ID = 1;
 */
+const joi = require("joi"); //validation
+const schema = joi.number().min(1).max(999).required();
+
 exports.getFriendData = function getFriendData(req, res) {
+  const { error } = schema.validate(req.params.id); //(req.params.id = url parameter)
+  if (error) {
+    return res.status(400).json(error.details[0].message);
+  }
+
   const data = { Lists: [], Friends: [] };
   const query =
     "SELECT Tasks.ID AS taskId, Tasks.text, Tasks.status, Lists.ListName as listName,Lists.ID AS listId FROM Tasks RIGHT JOIN Lists ON Tasks.listID = Lists.ID JOIN Users ON Lists.UserID = Users.ID WHERE Users.ID = ?";
