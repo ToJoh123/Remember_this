@@ -83,7 +83,7 @@ export default function Lists() {
     }));
     console.log("delete task", taskID, "from list", listID);
   }
-  console.log(friendsLists)
+
   return (
     <div className='lists'>
       <div>

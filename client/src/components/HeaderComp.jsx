@@ -13,7 +13,6 @@ export default function HeaderComp() {
             }
         })
         const data = await response.json();
-        console.log(data);
         if (response.status === 200) {
             window.location.href = '/';
         }
@@ -26,7 +25,7 @@ export default function HeaderComp() {
                     <h1>Remember this</h1>
                 </Grid>
                 <Grid item>
-                    <NavLink to="/"><Button>Start</Button>
+                    <NavLink to="/"><Button>Welcome</Button>
                     </NavLink>
                     <NavLink to="/home">
                         <Button>Home</Button>
