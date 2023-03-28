@@ -27,7 +27,7 @@ const { friendRoutes } = require("./Routes/friendsRoute");
 server.use("/list", tasteCookie, listRoutes);
 server.use("/task", tasteCookie, taskRoutes);
 server.use("/data", tasteCookie, dataRoutes);
-server.use("/friend", friendRoutes);
+server.use("/friend", tasteCookie, friendRoutes);
 server.use("/auth", authRoutes);
 
 server.use(function (req, res, next) {
