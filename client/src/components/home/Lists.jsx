@@ -25,7 +25,6 @@ export default function Lists() {
         credentials: 'include',
       });
       const data = await response.json();
-      console.log(data);
       setUserLists(data.Lists);
     }
     fetchLists();
@@ -84,7 +83,40 @@ export default function Lists() {
 
     console.log("delete list", listID);
   }
-
+  function handleDeleteTask(listID, taskID) {
+    fetch('http://localhost:3001/task', {
+      body: JSON.stringify({ ID: taskID, ListID: listID }),
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          setUserLists(
+            userLists.map((list) => {
+              if (list.listId === listID) {
+                return {
+                  ...list,
+                  tasks: list.tasks.filter((task) => task.taskId !== taskID),
+                };
+              }
+              return list;
+            })
+          );
+          setActiveList(null)
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    console.log("delete task", taskID, "from list", listID);
+  }
   function handleEditList(listID, text) {
     fetch('http://localhost:3001/list', {
       body: JSON.stringify({ ID: listID, ListName: text }),
@@ -248,7 +280,6 @@ export default function Lists() {
         ) : (
           <p>No lists found</p>
         )}
-
         <Friends />
       </div>
     </div>

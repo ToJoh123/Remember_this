@@ -14,7 +14,6 @@ export default function Users() {
         credentials: 'include',
       });
       const data = await response.json();
-      console.log(data);
       setBackendUsers(data);
     }
     fetchUsers();
