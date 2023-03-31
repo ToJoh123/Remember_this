@@ -6,7 +6,7 @@ const joi = require("joi"); //validation
 const schema = joi.number().min(1).max(999).required();
 
 exports.getTaskId = function getTasksID(req, res) {
-  const { error } = schema.validate(req.params.id); //(req.params.id = url parameter)
+  const { error } = schema.validate(req.params); //(req.params.id = url parameter)
   if (error) {
     return res.status(400).json(error.details[0].message);
   }
